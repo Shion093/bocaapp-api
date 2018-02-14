@@ -6,7 +6,7 @@ const helmet = require('helmet');
 const cors = require('cors');
 
 const routes = require('../api');
-const { logs } = require('../config/constants');
+const { logs } = require('./constants');
 
 const app = express();
 

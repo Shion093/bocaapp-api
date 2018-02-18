@@ -1,12 +1,12 @@
 const express = require('express');
 const validate = require('express-validation');
 
-const { menu } = require('./validations');
+const { boca } = require('./validations');
 
-const { createMenu } = require('./actions');
+const { createBoca } = require('./actions');
 
 const router = express.Router();
 
-router.route('/create').post(validate(menu), createMenu);
+router.route('/create').post(validate(boca), createBoca);
 
 module.exports = router;

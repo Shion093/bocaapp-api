@@ -1,9 +1,13 @@
 const mongoose = require('mongoose');
 
-const menuSchema = new mongoose.Schema({
+const bocaSchema = new mongoose.Schema({
   author      : {
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'User',
+  },
+  menu      : {
+    type : mongoose.Schema.Types.ObjectId,
+    ref  : 'Menu',
   },
   description : {
     type  : String,
@@ -24,4 +28,4 @@ const menuSchema = new mongoose.Schema({
   timestamps : true,
 });
 
-module.exports = mongoose.model('Menu', menuSchema);
+module.exports = mongoose.model('Boca', bocaSchema);

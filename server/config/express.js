@@ -7,6 +7,7 @@ const cors = require('cors');
 
 const routes = require('../api');
 const { logs } = require('./constants');
+const { converter , handler, notFound } = require('../middlewares/errors');
 
 const app = express();
 
@@ -18,5 +19,9 @@ app.use(helmet());
 app.use(cors());
 
 app.use('/v1', routes);
+
+app.use(converter);
+app.use(notFound);
+app.use(handler);
 
 module.exports = app;

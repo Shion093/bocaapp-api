@@ -12,7 +12,7 @@ const { converter , handler, notFound } = require('../middlewares/errors');
 const app = express();
 
 app.use(morgan(logs));
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compress());
 app.use(helmet());

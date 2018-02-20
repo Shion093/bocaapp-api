@@ -18,7 +18,6 @@ const menuSchema = new mongoose.Schema({
   },
   picture     : {
     type : String,
-    trim : true,
   },
 }, {
   timestamps : true,

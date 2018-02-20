@@ -20,7 +20,6 @@ const handler = (err, req, res, next) => {
 
 const converter = (err, req, res, next) => {
   let convertedError = err;
-  console.log(err);
   if (err instanceof expressValidation.ValidationError) {
     convertedError = new APIError({
       message : 'Validation error',

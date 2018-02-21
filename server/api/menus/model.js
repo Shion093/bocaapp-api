@@ -19,8 +19,10 @@ const menuSchema = new mongoose.Schema({
   picture     : {
     type : String,
   },
-}, {
-  timestamps : true,
-});
+  bocas : [{
+    type : mongoose.Schema.Types.ObjectId,
+    ref  : 'Boca',
+  }]
+}, { timestamps : true });
 
 module.exports = mongoose.model('Menu', menuSchema);

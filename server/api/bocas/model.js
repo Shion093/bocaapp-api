@@ -9,6 +9,10 @@ const bocaSchema = new mongoose.Schema({
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'Menu',
   },
+  assigned : {
+    type : Boolean,
+    default : false,
+  },
   description : {
     type  : String,
     index : true,
@@ -24,8 +28,9 @@ const bocaSchema = new mongoose.Schema({
     type : String,
     trim : true,
   },
-}, {
-  timestamps : true,
-});
+  price : {
+    type : Number
+  }
+}, { timestamps : true });
 
 module.exports = mongoose.model('Boca', bocaSchema);

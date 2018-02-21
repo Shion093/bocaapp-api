@@ -8,11 +8,7 @@ const { createMenu, getAllMenus } = require('./actions');
 
 const router = express.Router();
 
-router.route('/create').post(
-  multer().single('picture'),
-  validate(menu),
-  createMenu,
-);
+router.route('/create').post(multer().single('picture'), validate(menu), createMenu);
 
 router.route('/').get(getAllMenus);
 

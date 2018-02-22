@@ -12,6 +12,6 @@ router.route('/create').post(createCart);
 
 router.route('/add').post(addToCart);
 
-router.route('/').get(getCart);
+router.route('/:id').get(getCart);
 
 module.exports = router;

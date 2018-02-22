@@ -8,7 +8,7 @@ const uploadS3 = require('../../helpers/s3');
 
 async function getCart (req, res, next) {
   try {
-    const cart = await Cart.findOne({ _id : '5a8e7366715a2b714cd808b3' });
+    const cart = await Cart.findOne({ _id : req.params.id });
     return res.status(200).json(cart);
   } catch (err) {
     return errorHandler(error, req, res);

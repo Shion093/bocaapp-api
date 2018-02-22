@@ -1,6 +1,7 @@
 const express = require('express');
 const menus = require('./menus');
 const bocas = require('./bocas');
+const cart = require('./cart');
 
 const router = express.Router();
 
@@ -9,5 +10,6 @@ router.use('/docs', express.static('docs'));
 
 router.use('/menus', menus);
 router.use('/bocas', bocas);
+router.use('/cart', cart);
 
 module.exports = router;

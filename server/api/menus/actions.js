@@ -9,7 +9,7 @@ async function getAllMenus (req, res, next) {
     const menus = await Menu.find({}).populate('bocas').sort([['createdAt', -1]]);
     return res.status(200).json(menus);
   } catch (err) {
-    return errorHandler(error, req, res);
+    return errorHandler(err, req, res);
   }
 }
 
@@ -22,11 +22,21 @@ async function createMenu (req, res, next) {
     const menu = await (new Menu(req.body)).save();
     return res.status(200).json(menu);
   } catch (err) {
-    return errorHandler(error, req, res);
+    return errorHandler(err, req, res);
+  }
+}
+
+async function getMenuById (req, res, next) {
+  try {
+    const menu = await Menu.findOne({ _id : req.params.id }).populate('bocas').sort([['createdAt', -1]]);
+    return res.status(200).json(menu);
+  } catch (err) {
+    return errorHandler(err, req, res);
   }
 }
 
 module.exports = {
   createMenu,
   getAllMenus,
+  getMenuById,
 };

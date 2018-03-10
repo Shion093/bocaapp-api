@@ -43,6 +43,7 @@ async function addToCart (req, res, next) {
         },
         { $set : { 'products.$.qty' : newQty } }, { new : true });
     } else {
+      item.qty = 1;
       cart = await Cart.findOneAndUpdate({ user : '5a8e6d8491d11a0956875739' },
         {
           $push : {
@@ -58,12 +59,16 @@ async function addToCart (req, res, next) {
   }
 }
 
-async function removeBocaFromMenu (req, res, next) {
+async function removeFromCart (req, res, next) {
   try {
-    const { menuId, bocaId } = req.body;
-    await Menu.findOneAndUpdate({ _id : menuId }, { $pull: { bocas : bocaId } });
-    const boca = await Cart.findOneAndUpdate({ _id : bocaId }, { $set: { assigned : false } }, { new : true});
-    return res.status(200).json(boca);
+    const { cartId, itemId } = req.body;
+    const cart = await Cart.findOneAndUpdate({
+        user           : '5a8e6d8491d11a0956875739',
+        _id            : cartId,
+        'products._id' : itemId,
+      },
+      { $pull : { products : { _id : itemId } } }, { new : true });
+    return res.status(200).json(cart);
   } catch (err) {
     return errorHandler(err, req, res);
   }
@@ -73,5 +78,5 @@ module.exports = {
   createCart,
   getCart,
   addToCart,
-  removeBocaFromMenu,
+  removeFromCart,
 };

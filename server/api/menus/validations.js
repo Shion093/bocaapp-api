@@ -8,4 +8,9 @@ module.exports = {
       name: Joi.string().max(128),
     },
   },
+  singleMenu : {
+    params : {
+      id : Joi.string().required(),
+    }
+  }
 };

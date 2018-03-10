@@ -31,7 +31,7 @@ async function assignBocaToMenu (req, res, next) {
   try {
     const { menuId, bocaId } = req.body;
     await Menu.findOneAndUpdate({ _id : menuId }, { $push: { bocas : bocaId } });
-    const boca = await Boca.findOneAndUpdate({ _id : bocaId }, { $set: { assigned : true } }, { new : true});
+    const boca = await Boca.findOneAndUpdate({ _id : bocaId }, { $set: { assigned : true, menu : menuId } }, { new : true});
     return res.status(200).json(boca);
   } catch (err) {
     return errorHandler(err, req, res);
@@ -42,10 +42,18 @@ async function removeBocaFromMenu (req, res, next) {
   try {
     const { menuId, bocaId } = req.body;
     await Menu.findOneAndUpdate({ _id : menuId }, { $pull: { bocas : bocaId } });
-    const boca = await Boca.findOneAndUpdate({ _id : bocaId }, { $set: { assigned : false } }, { new : true});
+    const boca = await Boca.findOneAndUpdate({ _id : bocaId }, { $set: { assigned : false, menu : null } }, { new : true});
     return res.status(200).json(boca);
   } catch (err) {
     return errorHandler(err, req, res);
+  }
+}
+
+async function getBocasByMenuId (_id) {
+  try {
+    const bocas = await Boca.find()
+  } catch (err) {
+
   }
 }
 

@@ -2,6 +2,7 @@ const express = require('express');
 const menus = require('./menus');
 const bocas = require('./bocas');
 const cart = require('./cart');
+const orders = require('./orders');
 
 const router = express.Router();
 
@@ -11,5 +12,6 @@ router.use('/docs', express.static('docs'));
 router.use('/menus', menus);
 router.use('/bocas', bocas);
 router.use('/cart', cart);
+router.use('/orders', orders);
 
 module.exports = router;

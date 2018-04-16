@@ -8,7 +8,18 @@ const uploadS3 = require('../../helpers/s3');
 
 async function getCart (req, res, next) {
   try {
-    const cart = await Cart.findOne({ _id : req.params.id });
+    let cart = await Cart.findOne({ user : req.params.userId });
+    console.log(cart);
+    if (_.isNull(cart)) {
+      cart = new Cart({
+        user     : req.params.userId,
+        products : [],
+        tax      : 0,
+        subtotal : 0,
+        total    : 0,
+      });
+      await cart.save();
+    }
     return res.status(200).json(cart);
   } catch (err) {
     return errorHandler(error, req, res);
@@ -53,6 +64,7 @@ async function addToCart (req, res, next) {
           }
         }, { new : true, upsert : true });
     }
+    cart.calculatesPrices();
     return res.status(200).json(cart);
   } catch (err) {
     return errorHandler(err, req, res);
@@ -68,6 +80,7 @@ async function removeFromCart (req, res, next) {
         'products._id' : itemId,
       },
       { $pull : { products : { _id : itemId } } }, { new : true });
+    cart.calculatesPrices();
     return res.status(200).json(cart);
   } catch (err) {
     return errorHandler(err, req, res);

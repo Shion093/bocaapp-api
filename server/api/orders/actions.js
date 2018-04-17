@@ -10,8 +10,8 @@ async function createOrder (req, res, next) {
       user : req.body.userId,
     });
     const order = _.omit(cart.toJSON(), ['_id', 'createdAt', 'updatedAt', '__v']);
-    console.log(order);
     const newOrder = new Order(order);
+    newOrder.orderNumber = await newOrder.getOrderNumber();
     await newOrder.save();
     await cart.remove();
     return res.status(200).json(newOrder);
@@ -21,6 +21,38 @@ async function createOrder (req, res, next) {
   }
 }
 
+async function userOrders (req, res, next) {
+  try {
+    const orders = await Order.find({
+      user : req.params.userId,
+    });
+    return res.status(200).json(orders);
+  } catch (err) {
+    console.log(err);
+    return errorHandler(err, req, res);
+  }
+}
+
+async function reOrder (req, res, next) {
+  try {
+    const order = await Order.findOne({
+      _id : req.body.orderId,
+    });
+    const cart = await Cart.findOneAndUpdate(
+      { user : req.body.userId },
+      { $set : { products : order.products } },
+      { new : true }
+    );
+    cart.calculatesPrices();
+    return res.status(200).json(cart);
+  } catch (err) {
+    console.log(err);
+    return errorHandler(err, req, res);
+  }
+}
+
 module.exports = {
   createOrder,
+  userOrders,
+  reOrder,
 };

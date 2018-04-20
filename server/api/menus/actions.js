@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const shortid = require('shortid');
 const { handler : errorHandler } = require('../../middlewares/errors');
 const Menu = require('./model');
@@ -35,8 +36,30 @@ async function getMenuById (req, res, next) {
   }
 }
 
+async function updateMenu (req, res, next) {
+  try {
+    if (_.has(req.file, 'buffer')) {
+      console.log('hola');
+      const fileName = `menus/${shortid.generate()}.jpg`;
+      const fileOptimized = await optimizeImage(req.file.buffer);
+      const image = await uploadS3({ bucket : 'bocaapp', fileName, data : fileOptimized });
+      req.body.picture = image.Location;
+    }
+    const menu = await Menu.findOneAndUpdate(
+      { _id : req.body._id },
+      { $set : req.body },
+      { new : true }
+    );
+    const menus = await Menu.find({}).populate('bocas').sort([['createdAt', -1]]);
+    return res.status(200).json(menus);
+  } catch (err) {
+    return errorHandler(err, req, res);
+  }
+}
+
 module.exports = {
   createMenu,
   getAllMenus,
   getMenuById,
+  updateMenu,
 };

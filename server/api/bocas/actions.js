@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const shortid = require('shortid');
 const { handler : errorHandler } = require('../../middlewares/errors');
 const Boca = require('./model');
@@ -22,6 +23,28 @@ async function createBoca (req, res, next) {
     req.body.picture = image.Location;
     const boca = await (new Boca(req.body)).save();
     return res.status(200).json(boca);
+  } catch (err) {
+    return errorHandler(err, req, res);
+  }
+}
+
+async function updateBoca (req, res, next) {
+  try {
+    if (_.has(req.file, 'buffer')) {
+      console.log('hola');
+      const fileName = `menus/${shortid.generate()}.jpg`;
+      const fileOptimized = await optimizeImage(req.file.buffer);
+      const image = await uploadS3({ bucket : 'bocaapp', fileName, data : fileOptimized });
+      req.body.picture = image.Location;
+    }
+    const boca = await Boca.findOneAndUpdate(
+      { _id : req.body._id },
+      { $set : _.omit(req.body, ['menuId']) },
+      { new : true }
+    );
+    const menu = await Menu.findOne({ _id : req.body.menuId }).populate('bocas').sort({ 'createdAt' : 'desc' });
+    const bocas = await Boca.find({ assigned : false }).sort({ 'createdAt' : 'desc' });
+    return res.status(200).json({ menu, bocas });
   } catch (err) {
     return errorHandler(err, req, res);
   }
@@ -72,6 +95,7 @@ async function getBocasByMenuId (_id) {
 
 module.exports = {
   createBoca,
+  updateBoca,
   getAllBocas,
   assignBocaToMenu,
   removeBocaFromMenu,

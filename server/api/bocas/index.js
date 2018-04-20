@@ -4,12 +4,13 @@ const multer = require('multer');
 
 const { boca, assign, bocaUpdate } = require('./validations');
 
-const { createBoca, getAllBocas, assignBocaToMenu, removeBocaFromMenu, updateBoca } = require('./actions');
+const { createBoca, getAllBocas, assignBocaToMenu, removeBocaFromMenu, updateBoca, deleteBoca } = require('./actions');
 
 const router = express.Router();
 
 router.route('/create').post(multer().single('picture'), validate(boca), createBoca);
 router.route('/update').post(multer().single('picture'), validate(bocaUpdate), updateBoca);
+router.route('/delete').post(deleteBoca);
 
 router.route('/assign').post(validate(assign), assignBocaToMenu);
 

@@ -2,6 +2,7 @@ const _ = require('lodash');
 const shortid = require('shortid');
 const { handler : errorHandler } = require('../../middlewares/errors');
 const Menu = require('./model');
+const Boca = require('../bocas/model');
 const uploadS3 = require('../../helpers/s3');
 const { optimizeImage } = require('../../helpers/image');
 
@@ -56,10 +57,23 @@ async function updateMenu (req, res, next) {
     return errorHandler(err, req, res);
   }
 }
+async function deleteMenu (req, res) {
+  try {
+    const deletedMenu = await Menu.findByIdAndRemove(req.body.menuId);
+    console.log(deletedMenu);
+    const bocas = await Boca.update({ _id : { $in : deletedMenu.bocas }}, { assigned : false }, { multi: true });
+    const menus = await Menu.find({}).populate('bocas').sort([['createdAt', -1]]);
+    return res.status(200).json(menus);
+  } catch (err) {
+    return errorHandler(err, req, res);
+  }
+}
+
 
 module.exports = {
   createMenu,
   getAllMenus,
   getMenuById,
   updateMenu,
+  deleteMenu,
 };

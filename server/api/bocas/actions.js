@@ -50,6 +50,17 @@ async function updateBoca (req, res, next) {
   }
 }
 
+async function deleteBoca (req, res) {
+  try {
+    const deletedBoca = await Boca.findByIdAndRemove(req.body.bocaId);
+    const menu = await Menu.findOne({ _id : req.body.menuId }).populate('bocas').sort({ 'createdAt' : 'desc' });
+    const bocas = await Boca.find({ assigned : false }).sort({ 'createdAt' : 'desc' });
+    return res.status(200).json({ menu, bocas });
+  } catch (err) {
+    return errorHandler(err, req, res);
+  }
+}
+
 async function assignBocaToMenu (req, res, next) {
   try {
     const { menuId, bocaId } = req.body;
@@ -99,4 +110,5 @@ module.exports = {
   getAllBocas,
   assignBocaToMenu,
   removeBocaFromMenu,
+  deleteBoca,
 };

@@ -9,6 +9,16 @@ module.exports = {
       name        : Joi.string().max(128),
     },
   },
+  // POST /v1/bocas/update
+  bocaUpdate : {
+    body : {
+      description : Joi.string().min(6).required(),
+      price       : Joi.number().required(),
+      name        : Joi.string().max(128),
+      _id         : Joi.string().max(128),
+      menuId      : Joi.string().max(128),
+    },
+  },
   // POST /v1/bocas/assign
   assign : {
     body : {

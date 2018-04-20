@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const _ = require('lodash');
 
-const orderStatus = ['Procesando', 'En cocina', 'Lista'];
+const orderStatus = ['Procesando', 'En cocina', 'Lista', 'Entregada'];
 
 const orderSchema = new mongoose.Schema({
   user        : {
@@ -24,12 +24,11 @@ const counterSchema = new mongoose.Schema({
 const counter = mongoose.model('Counter', counterSchema);
 
 orderSchema.methods.getOrderNumber = function () {
-  return counter.findOneAndUpdate({ name : 'orderNumbers' },
+  return counter.findOneAndUpdate(
+    { name : 'orderNumbers' },
     { $inc : { counter : 1 } },
-    { new : true, upsert : true })
-    .then((result) => {
-      return result.counter;
-    })
+    { new : true, upsert : true }
+  ).then((result) => result.counter);
 };
 
 module.exports = mongoose.model('Order', orderSchema);

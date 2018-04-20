@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+const Menu = require('../menus/model');
+
 const bocaSchema = new mongoose.Schema({
   author      : {
     type : mongoose.Schema.Types.ObjectId,
@@ -32,5 +34,16 @@ const bocaSchema = new mongoose.Schema({
     type : Number
   }
 }, { timestamps : true });
+
+bocaSchema.pre('remove', function (next) {
+  if (this.menu) {
+    Menu.update(
+      { _id : this.menu},
+      { $pull: { bocas: this._id } },
+      { multi: true })  //if reference exists in multiple documents
+      .exec();
+    next();
+  }
+});
 
 module.exports = mongoose.model('Boca', bocaSchema);

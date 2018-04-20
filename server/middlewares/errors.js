@@ -1,5 +1,5 @@
 const expressValidation = require('express-validation');
-const APIError = require('../utils/APIError');
+const APIError = require('../utils/apiError');
 const { env } = require('../config/constants');
 
 const handler = (err, req, res, next) => {

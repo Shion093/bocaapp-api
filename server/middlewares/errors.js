@@ -3,7 +3,6 @@ const APIError = require('../utils/apiError');
 const { env } = require('../config/constants');
 
 const handler = (err, req, res, next) => {
-  console.log(err);
   const response = {
     code    : err.status,
     message : err.message || err.status,
@@ -19,7 +18,9 @@ const handler = (err, req, res, next) => {
   res.end();
 };
 
-const converter = (err, req, res, next) => {
+exports.handler = handler;
+
+exports.converter = (err, req, res, next) => {
   let convertedError = err;
   if (err instanceof expressValidation.ValidationError) {
     convertedError = new APIError({
@@ -39,16 +40,10 @@ const converter = (err, req, res, next) => {
   return handler(convertedError, req, res);
 };
 
-const notFound = (req, res, next) => {
+exports.notFound = (req, res, next) => {
   const err = new APIError({
     message : 'Not found',
     status  : 404,
   });
   return handler(err, req, res);
-};
-
-module.exports = {
-  notFound,
-  converter,
-  handler,
 };

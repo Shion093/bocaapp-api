@@ -40,7 +40,6 @@ async function getMenuById (req, res, next) {
 async function updateMenu (req, res, next) {
   try {
     if (_.has(req.file, 'buffer')) {
-      console.log('hola');
       const fileName = `menus/${shortid.generate()}.jpg`;
       const fileOptimized = await optimizeImage(req.file.buffer);
       const image = await uploadS3({ bucket : 'bocaapp', fileName, data : fileOptimized });
@@ -60,7 +59,6 @@ async function updateMenu (req, res, next) {
 async function deleteMenu (req, res) {
   try {
     const deletedMenu = await Menu.findByIdAndRemove(req.body.menuId);
-    console.log(deletedMenu);
     const bocas = await Boca.update({ _id : { $in : deletedMenu.bocas }}, { assigned : false }, { multi: true });
     const menus = await Menu.find({}).populate('bocas').sort([['createdAt', -1]]);
     return res.status(200).json(menus);

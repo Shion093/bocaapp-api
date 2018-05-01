@@ -18,9 +18,7 @@ const handler = (err, req, res, next) => {
   res.end();
 };
 
-exports.handler = handler;
-
-exports.converter = (err, req, res, next) => {
+const converter = (err, req, res, next) => {
   let convertedError = err;
   if (err instanceof expressValidation.ValidationError) {
     convertedError = new APIError({
@@ -40,10 +38,16 @@ exports.converter = (err, req, res, next) => {
   return handler(convertedError, req, res);
 };
 
-exports.notFound = (req, res, next) => {
+const notFound = (req, res, next) => {
   const err = new APIError({
     message : 'Not found',
     status  : 404,
   });
   return handler(err, req, res);
+};
+
+module.exports = {
+  notFound,
+  converter,
+  handler,
 };

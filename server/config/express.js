@@ -7,7 +7,7 @@ const cors = require('cors');
 
 const routes = require('../api');
 const { logs } = require('./constants');
-const error = require('../middlewares/errors');
+const { handler, converter, notFound } = require('../middlewares/errors');
 const passport = require('./passport');
 
 const app = express();
@@ -23,8 +23,8 @@ passport.setJwtStrategy();
 
 app.use('/v1', routes);
 
-app.use(error.converter);
-app.use(error.notFound);
-app.use(error.handler);
+app.use(converter);
+app.use(notFound);
+app.use(handler);
 
 module.exports = app;

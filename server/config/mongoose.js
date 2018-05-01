@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const aclConfig = require('./acl');
-const aclStore = require('../helpers/aclStore');
 const { env, mongo } = require('./constants');
 
 mongoose.Promise = Promise;
@@ -11,8 +9,7 @@ mongoose.connection.on('error', (err) => {
 });
 
 mongoose.connection.once('open', () => {
-  aclConfig(mongoose.connection.db);
-  console.log(aclStore);
+
 });
 
 if (env === 'development') {

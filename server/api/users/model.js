@@ -64,7 +64,7 @@ userSchema.methods.comparePassword = function (candidatePassword) {
 
 userSchema.methods.generateToken = function generateToken (user) {
   const payload = {
-    _id    : user._id,
+    _id   : user._id,
     email : user.email,
     role  : user.role,
   };
@@ -82,38 +82,6 @@ userSchema.methods.generateToken = function generateToken (user) {
   return {
     token,
     refreshToken,
-  };
-};
-
-userSchema.methods.refreshTokens = async function (refreshToken) {
-  let userId = -1;
-  try {
-    const { _id } = jwt.decode(refreshToken);
-    userId = _id;
-  } catch (err) {
-    return {};
-  }
-
-  if (!userId) {
-    return {};
-  }
-
-  const user = await this.findOne({ _id: userId });
-
-  if (!user) {
-    return {};
-  }
-
-  try {
-    jwt.verify(refreshToken, process.env.JWT_SECRET);
-  } catch (err) {
-    return {};
-  }
-
-  const [newToken, newRefreshToken] = await this.generateToken(user);
-  return {
-    token: newToken,
-    refreshToken: newRefreshToken,
   };
 };
 

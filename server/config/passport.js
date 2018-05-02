@@ -1,24 +1,27 @@
 const passport = require('passport');
 const passportJwt = require('passport-jwt');
+const _ = require('lodash');
 const User = require('../api/users/model');
+const { refreshTokens } = require('../helpers/auth');
 
 const initialize = () => passport.initialize();
 const authenticate = () => {
   return (req, res, next) => {
     passport.authenticate('jwt', { session : false }, async (err, data, info) => {
-      console.log(data);
-      console.log(info.name);
-      if (info.name === 'TokenExpiredError') {
-        console.log(req.headers['x-refresh-token']);
-        const tokens = await User.refreshTokens(req.headers['x-refresh-token']);
+      let tokens = {};
+      if (info) {
+        tokens = await refreshTokens(req.headers['x-refresh-token']);
         res.set('Access-Control-Expose-Headers', 'x-token, x-refresh-token');
-        res.set('x-token', 'hola');
-        res.set('x-refresh-token', 'hola');
+        res.set('x-token', tokens.token);
+        res.set('x-refresh-token', tokens.refreshToken);
+        if (_.isEmpty(tokens)) {
+          return res.status(401).json({ message : 'Login again' })
+        }
       }
-      if (err || info) {
-        res.status(401).json({ message : 'Unauthorized' })
+      if (err) {
+        return res.status(401).json({ message : 'Unauthorized' })
       } else {
-        next();
+        return next();
       }
     })(req, res, next);
   };

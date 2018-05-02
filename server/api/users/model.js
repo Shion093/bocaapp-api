@@ -70,12 +70,51 @@ userSchema.methods.generateToken = function generateToken (user) {
   };
 
   const options = {
-    expiresIn : 10080
+    expiresIn : '5s'
+  };
+  const refreshOptions = {
+    expiresIn : '1m'
   };
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, options);
+  const refreshToken = jwt.sign({_id : user._id}, process.env.JWT_SECRET, refreshOptions);
 
-  return `bearer ${token}`;
+  return {
+    token,
+    refreshToken,
+  };
+};
+
+userSchema.methods.refreshTokens = async function (refreshToken) {
+  let userId = -1;
+  try {
+    const { _id } = jwt.decode(refreshToken);
+    userId = _id;
+  } catch (err) {
+    return {};
+  }
+
+  if (!userId) {
+    return {};
+  }
+
+  const user = await this.findOne({ _id: userId });
+
+  if (!user) {
+    return {};
+  }
+
+  try {
+    jwt.verify(refreshToken, process.env.JWT_SECRET);
+  } catch (err) {
+    return {};
+  }
+
+  const [newToken, newRefreshToken] = await this.generateToken(user);
+  return {
+    token: newToken,
+    refreshToken: newRefreshToken,
+  };
 };
 
 module.exports = mongoose.model('user', userSchema);

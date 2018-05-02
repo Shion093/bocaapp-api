@@ -1,4 +1,5 @@
 const express = require('express');
+const restaurant = require('./restaurant');
 const menus = require('./menus');
 const bocas = require('./bocas');
 const cart = require('./cart');
@@ -12,6 +13,7 @@ const router = express.Router();
 router.get('/status', (req, res) => res.send('OK'));
 router.use('/docs', express.static('docs'));
 
+router.use('/restaurant', authenticate(), restaurant);
 router.use('/menus', authenticate(), menus);
 router.use('/bocas', bocas);
 router.use('/cart', cart);

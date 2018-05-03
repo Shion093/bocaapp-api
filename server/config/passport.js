@@ -34,8 +34,6 @@ function setJwtStrategy () {
     passReqToCallback : true
   };
   const strategy = new passportJwt.Strategy(opts, (req, jwtPayload, done) => {
-    console.log(jwtPayload);
-    console.log(req);
     const _id = jwtPayload._id;
     User.findOne({ _id }, (err, user) => {
       if (err) return done(err, false);

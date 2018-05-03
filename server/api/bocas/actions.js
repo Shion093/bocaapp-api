@@ -31,7 +31,6 @@ async function createBoca (req, res, next) {
 async function updateBoca (req, res, next) {
   try {
     if (_.has(req.file, 'buffer')) {
-      console.log('hola');
       const fileName = `menus/${shortid.generate()}.jpg`;
       const fileOptimized = await optimizeImage(req.file.buffer);
       const image = await uploadS3({ bucket : 'bocaapp', fileName, data : fileOptimized });

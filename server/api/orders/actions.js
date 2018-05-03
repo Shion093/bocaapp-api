@@ -16,7 +16,6 @@ async function createOrder (req, res, next) {
     await cart.remove();
     return res.status(200).json(newOrder);
   } catch (err) {
-    console.log(err);
     return errorHandler(err, req, res);
   }
 }
@@ -28,7 +27,6 @@ async function userOrders (req, res, next) {
     });
     return res.status(200).json(orders);
   } catch (err) {
-    console.log(err);
     return errorHandler(err, req, res);
   }
 }
@@ -38,7 +36,6 @@ async function allOrders (req, res, next) {
     const orders = await Order.find({}).sort({ createdAt : 'desc' });
     return res.status(200).json(orders);
   } catch (err) {
-    console.log(err);
     return errorHandler(err, req, res);
   }
 }
@@ -56,7 +53,6 @@ async function reOrder (req, res, next) {
     cart.calculatesPrices();
     return res.status(200).json(cart);
   } catch (err) {
-    console.log(err);
     return errorHandler(err, req, res);
   }
 }
@@ -71,7 +67,7 @@ async function changeOrderStatus (req, res, next) {
     const orders = await Order.find({}).sort({ createdAt : 'desc' });
     return res.status(200).json(orders);
   } catch (err) {
-    console.log(err);
+    return errorHandler(err, req, res);
   }
 }
 

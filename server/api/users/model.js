@@ -73,7 +73,7 @@ userSchema.methods.generateToken = function generateToken (user) {
     expiresIn : '5s'
   };
   const refreshOptions = {
-    expiresIn : '1m'
+    expiresIn : '30m'
   };
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, options);

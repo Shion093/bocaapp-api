@@ -8,7 +8,6 @@ async function createUser (req, res, next) {
   try {
     const newUser = new User(req.body);
     const userSaved = await newUser.save();
-    console.log(userSaved);
     return res.status(200).json(userSaved);
   } catch (err) {
     // console.log(err);

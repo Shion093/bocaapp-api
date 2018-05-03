@@ -14,12 +14,12 @@ hooks:
   BeforeInstall:
     - location: scripts/beforeinstall.sh
       timeout: 2000
-      runas: root
+      runas: ubuntu
   AfterInstall:
     - location: scripts/afterinstall.sh
       timeout: 2000
-      runas: root
+      runas: ubuntu
   ApplicationStart:
     - location: scripts/start.sh
       timeout: 2000
-      runas: root
+      runas: ubuntu

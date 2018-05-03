@@ -3,6 +3,13 @@ os: linux
 files:
   - source: /
     destination: /home/ubuntu/API
+permissions:
+  - object: /home/ubuntu
+    owner: ubuntu
+    group: ubuntu
+    type:
+      - directory
+      - file
 hooks:
   BeforeInstall:
     - location: scripts/beforeinstall.sh

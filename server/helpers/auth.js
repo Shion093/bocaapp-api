@@ -25,7 +25,6 @@ async function refreshTokens (refreshToken) {
   try {
     jwt.verify(refreshToken, process.env.JWT_SECRET);
   } catch (err) {
-    console.log(err);
     return {};
   }
 

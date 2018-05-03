@@ -4,7 +4,8 @@ files:
   - source: /
     destination: /home/ubuntu/API
 permissions:
-  - object: /home/ubuntu
+  - object: /
+    pattern: "**"
     owner: ubuntu
     group: ubuntu
     type:
@@ -14,7 +15,7 @@ hooks:
   BeforeInstall:
     - location: scripts/beforeinstall.sh
       timeout: 2000
-      runas: root
+      runas: ubuntu
   AfterInstall:
     - location: scripts/afterinstall.sh
       timeout: 2000

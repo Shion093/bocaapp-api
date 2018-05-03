@@ -15,7 +15,7 @@ const authenticate = () => {
         res.set('x-token', tokens.token);
         res.set('x-refresh-token', tokens.refreshToken);
         if (_.isEmpty(tokens)) {
-          return res.status(401).json({ message : 'Login again' })
+          return res.status(401).json({ message : 'Invalid token or expired' })
         }
       }
       if (err) {

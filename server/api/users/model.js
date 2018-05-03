@@ -70,10 +70,10 @@ userSchema.methods.generateToken = function generateToken (user) {
   };
 
   const options = {
-    expiresIn : '5s'
+    expiresIn : '1m'
   };
   const refreshOptions = {
-    expiresIn : '30m'
+    expiresIn : '5m'
   };
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, options);

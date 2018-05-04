@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const restaurantSchema = new mongoose.Schema({
-  author      : {
+  admin       : {
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'User',
   },
@@ -16,13 +16,10 @@ const restaurantSchema = new mongoose.Schema({
     index     : true,
     trim      : true,
   },
-  picture     : {
-    type : String,
+  url         : {
+    unique : true,
+    type   : String,
   },
-  bocas : [{
-    type : mongoose.Schema.Types.ObjectId,
-    ref  : 'Boca',
-  }]
 }, { timestamps : true });
 
 module.exports = mongoose.model('Restaurant', restaurantSchema);

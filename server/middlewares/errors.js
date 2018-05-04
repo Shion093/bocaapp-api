@@ -4,7 +4,7 @@ const { env } = require('../config/constants');
 
 const handler = (err, req, res, next) => {
   const response = {
-    code    : err.status,
+    code    : err.status ? err.status : 500,
     message : err.message || err.status,
     errors  : err.errors,
     stack   : err.stack,
@@ -14,7 +14,7 @@ const handler = (err, req, res, next) => {
     delete response.stack;
   }
 
-  res.status(err.status).json(response);
+  res.status(response.code).json(response);
   res.end();
 };
 

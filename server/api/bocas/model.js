@@ -40,7 +40,7 @@ bocaSchema.pre('remove', function (next) {
     Menu.update(
       { _id : this.menu},
       { $pull: { bocas: this._id } },
-      { multi: true })  //if reference exists in multiple documents
+      { multi: true })
       .exec();
     next();
   }

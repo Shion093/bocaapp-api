@@ -21,6 +21,7 @@ async function createRestaurant (req, res, next) {
 
     req.body.admin = user._id;
     const restaurant = await (new Restaurant(req.body)).save();
+    await User.findOneAndUpdate({ _id : user._id }, { role : 'admin' , restaurant : restaurant._id});
     return res.status(200).json(restaurant);
   } catch (err) {
     console.log(err);
@@ -28,6 +29,16 @@ async function createRestaurant (req, res, next) {
   }
 }
 
+async function restaurantByUser (req, res, next) {
+  try {
+    const restaurant = await Restaurant.findOne({ admin : req.params.userId });
+    console.log(restaurant);
+  } catch (err) {
+    return errorHandler(err, req, res);
+  }
+}
+
 module.exports = {
   createRestaurant,
+  restaurantByUser,
 };

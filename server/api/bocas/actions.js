@@ -8,8 +8,9 @@ const uploadS3 = require('../../helpers/s3');
 
 async function getAllBocas (req, res, next) {
   try {
-    const menus = await Boca.find({ assigned : false }).sort([['createdAt', -1]]);
-    return res.status(200).json(menus);
+    console.log(req.user);
+    const bocas = await Boca.find({ assigned : false, restaurant : req.user.restaurant }).sort([['createdAt', -1]]);
+    return res.status(200).json(bocas);
   } catch (err) {
     return errorHandler(error, req, res);
   }
@@ -21,6 +22,7 @@ async function createBoca (req, res, next) {
     const fileOptimized = await optimizeImage(req.file.buffer);
     const image = await uploadS3({ bucket : 'bocaapp', fileName, data : fileOptimized });
     req.body.picture = image.Location;
+    req.body.restaurant = req.user.restaurant;
     const boca = await (new Boca(req.body)).save();
     return res.status(200).json(boca);
   } catch (err) {

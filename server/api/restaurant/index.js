@@ -4,10 +4,11 @@ const multer = require('multer');
 
 const { menu, singleMenu, menuUpdate } = require('./validations');
 
-const { createRestaurant } = require('./actions');
+const { createRestaurant, restaurantByUser } = require('./actions');
 
 const router = express.Router();
 
 router.route('/create').post(createRestaurant);
+router.route('/:userId').get(restaurantByUser);
 
 module.exports = router;

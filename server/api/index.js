@@ -14,7 +14,7 @@ router.get('/status', (req, res) => res.send('OK'));
 router.use('/docs', express.static('docs'));
 
 router.use('/restaurant', authenticate(), restaurant);
-router.use('/menus', authenticate(), menus);
+router.use('/menus', menus);
 router.use('/bocas', bocas);
 router.use('/cart', cart);
 router.use('/orders', orders);

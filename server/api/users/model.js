@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
     enum    : ['user', 'admin', 'superAdmin', 'mod'],
     default : 'user'
   },
+  restaurant : {
+    type : mongoose.Schema.Types.ObjectId,
+    ref  : 'Restaurant',
+  }
 }, { timestamps : true });
 
 userSchema.pre('save', function (next) {

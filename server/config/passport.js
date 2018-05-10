@@ -21,6 +21,7 @@ const authenticate = () => {
       if (err) {
         return res.status(401).json({ message : 'Unauthorized' })
       } else {
+        req.user = data;
         return next();
       }
     })(req, res, next);
@@ -35,6 +36,7 @@ function setJwtStrategy () {
   };
   const strategy = new passportJwt.Strategy(opts, (req, jwtPayload, done) => {
     const _id = jwtPayload._id;
+    console.log(_id);
     User.findOne({ _id }, (err, user) => {
       if (err) return done(err, false);
       if (!user) {

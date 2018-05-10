@@ -8,7 +8,7 @@ const { optimizeImage } = require('../../helpers/image');
 
 async function getAllMenus (req, res, next) {
   try {
-    const menus = await Menu.find({}).populate('bocas').sort([['createdAt', -1]]);
+    const menus = await Menu.find({ restaurant : req.user.restaurant }).populate('bocas').sort([['createdAt', -1]]);
     return res.status(200).json(menus);
   } catch (err) {
     return errorHandler(err, req, res);
@@ -21,6 +21,7 @@ async function createMenu (req, res, next) {
     const fileOptimized = await optimizeImage(req.file.buffer);
     const image = await uploadS3({ bucket : 'bocaapp', fileName, data : fileOptimized });
     req.body.picture = image.Location;
+    req.body.restaurant = req.user.restaurant;
     const menu = await (new Menu(req.body)).save();
     return res.status(200).json(menu);
   } catch (err) {

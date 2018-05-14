@@ -9,7 +9,7 @@ const uploadS3 = require('../../helpers/s3');
 async function getAllBocas (req, res, next) {
   try {
     console.log(req.user);
-    const bocas = await Boca.find({ assigned : false, restaurant : req.user.restaurant }).sort([['createdAt', -1]]);
+    const bocas = await Boca.find({ assigned : false, restaurant : req.user.restaurant }).sort({'createdAt' : 'desc'});
     return res.status(200).json(bocas);
   } catch (err) {
     return errorHandler(error, req, res);
@@ -44,7 +44,7 @@ async function updateBoca (req, res, next) {
       { new : true }
     );
     const menu = await Menu.findOne({ _id : req.body.menuId }).populate('bocas').sort({ 'createdAt' : 'desc' });
-    const bocas = await Boca.find({ assigned : false }).sort({ 'createdAt' : 'desc' });
+    const bocas = await Boca.find({ assigned : false, restaurant : req.user.restaurant }).sort({ 'createdAt' : 'desc' });
     return res.status(200).json({ menu, bocas });
   } catch (err) {
     return errorHandler(err, req, res);
@@ -55,7 +55,7 @@ async function deleteBoca (req, res) {
   try {
     const deletedBoca = await Boca.findByIdAndRemove(req.body.bocaId);
     const menu = await Menu.findOne({ _id : req.body.menuId }).populate('bocas').sort({ 'createdAt' : 'desc' });
-    const bocas = await Boca.find({ assigned : false }).sort({ 'createdAt' : 'desc' });
+    const bocas = await Boca.find({ assigned : false, restaurant : req.user.restaurant }).sort({ 'createdAt' : 'desc' });
     return res.status(200).json({ menu, bocas });
   } catch (err) {
     return errorHandler(err, req, res);

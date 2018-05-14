@@ -16,7 +16,7 @@ const restaurantSchema = new mongoose.Schema({
     index     : true,
     trim      : true,
   },
-  url         : {
+  domain      : {
     unique : true,
     type   : String,
   },

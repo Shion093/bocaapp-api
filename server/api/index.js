@@ -13,7 +13,7 @@ const router = express.Router();
 router.get('/status', (req, res) => res.send('OK'));
 router.use('/docs', express.static('docs'));
 
-router.use('/restaurant', authenticate(), restaurant);
+router.use('/restaurant', restaurant);
 router.use('/menus', menus);
 router.use('/bocas', bocas);
 router.use('/cart', cart);

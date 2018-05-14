@@ -5,7 +5,7 @@ const {authenticate } = require('../../config/passport');
 
 const { menu, singleMenu, menuUpdate } = require('./validations');
 
-const { createMenu, getAllMenus, getMenuById, updateMenu, deleteMenu } = require('./actions');
+const { createMenu, getAllMenus, getMenuById, updateMenu, deleteMenu, getAllMenusClient } = require('./actions');
 
 const router = express.Router();
 
@@ -14,6 +14,7 @@ router.route('/update').post(authenticate(), multer().single('picture'), validat
 router.route('/delete').post(authenticate(), deleteMenu);
 
 router.route('/admin/all').get(authenticate(), getAllMenus);
+router.route('/client/:restId').get(getAllMenusClient);
 router.route('/:id').get(validate(singleMenu), getMenuById);
 
 module.exports = router;

@@ -56,6 +56,7 @@ async function addToCart (req, res, next) {
       item.qty = 1;
       cart = await Cart.findOneAndUpdate({ user : '5a8e6d8491d11a0956875739' },
         {
+          restaurant : item.restaurant,
           $push : {
             products : {
               ...item,

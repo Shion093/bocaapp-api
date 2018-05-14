@@ -2,14 +2,18 @@ const mongoose = require('mongoose');
 const _ = require('lodash');
 
 const cartSchema = new mongoose.Schema({
-  user     : {
+  user       : {
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'User',
   },
-  products : [],
-  total    : { type : Number },
-  tax      : { type : Number },
-  subTotal : { type : Number },
+  restaurant : {
+    type : mongoose.Schema.Types.ObjectId,
+    ref  : 'Restaurant',
+  },
+  products   : [],
+  total      : { type : Number },
+  tax        : { type : Number },
+  subTotal   : { type : Number },
 }, { timestamps : true });
 
 cartSchema.methods.calculatesPrices = function () {

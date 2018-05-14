@@ -28,6 +28,10 @@ const userSchema = new mongoose.Schema({
     enum    : ['user', 'admin', 'superAdmin', 'mod'],
     default : 'user'
   },
+  restaurant : {
+    type : mongoose.Schema.Types.ObjectId,
+    ref  : 'Restaurant',
+  }
 }, { timestamps : true });
 
 userSchema.pre('save', function (next) {
@@ -70,10 +74,10 @@ userSchema.methods.generateToken = function generateToken (user) {
   };
 
   const options = {
-    expiresIn : '1m'
+    expiresIn : '1h'
   };
   const refreshOptions = {
-    expiresIn : '5m'
+    expiresIn : '7d'
   };
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, options);

@@ -5,6 +5,11 @@ const menuSchema = new mongoose.Schema({
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'User',
   },
+  restaurant  : {
+    type     : mongoose.Schema.Types.ObjectId,
+    ref      : 'Restaurant',
+    required : true,
+  },
   description : {
     type  : String,
     index : true,
@@ -19,7 +24,7 @@ const menuSchema = new mongoose.Schema({
   picture     : {
     type : String,
   },
-  bocas : [{
+  bocas       : [{
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'Boca',
   }]

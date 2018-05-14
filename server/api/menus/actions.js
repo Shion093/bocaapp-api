@@ -8,7 +8,16 @@ const { optimizeImage } = require('../../helpers/image');
 
 async function getAllMenus (req, res, next) {
   try {
-    const menus = await Menu.find({}).populate('bocas').sort([['createdAt', -1]]);
+    const menus = await Menu.find({ restaurant : req.user.restaurant }).populate('bocas').sort({'createdAt' : 'desc'});
+    return res.status(200).json(menus);
+  } catch (err) {
+    return errorHandler(err, req, res);
+  }
+}
+
+async function getAllMenusClient (req, res, next) {
+  try {
+    const menus = await Menu.find({ restaurant : req.params.restId }).populate('bocas').sort({'createdAt' : 'desc'});
     return res.status(200).json(menus);
   } catch (err) {
     return errorHandler(err, req, res);
@@ -21,6 +30,7 @@ async function createMenu (req, res, next) {
     const fileOptimized = await optimizeImage(req.file.buffer);
     const image = await uploadS3({ bucket : 'bocaapp', fileName, data : fileOptimized });
     req.body.picture = image.Location;
+    req.body.restaurant = req.user.restaurant;
     const menu = await (new Menu(req.body)).save();
     return res.status(200).json(menu);
   } catch (err) {
@@ -30,7 +40,7 @@ async function createMenu (req, res, next) {
 
 async function getMenuById (req, res, next) {
   try {
-    const menu = await Menu.findOne({ _id : req.params.id }).populate('bocas').sort([['createdAt', -1]]);
+    const menu = await Menu.findOne({ _id : req.params.id }).populate('bocas').sort({'createdAt' : 'desc'});
     return res.status(200).json(menu);
   } catch (err) {
     return errorHandler(err, req, res);
@@ -50,7 +60,7 @@ async function updateMenu (req, res, next) {
       { $set : req.body },
       { new : true }
     );
-    const menus = await Menu.find({}).populate('bocas').sort([['createdAt', -1]]);
+    const menus = await Menu.find({ restaurant : req.user.restaurant }).populate('bocas').sort({'createdAt' : 'desc'});
     return res.status(200).json(menus);
   } catch (err) {
     return errorHandler(err, req, res);
@@ -60,7 +70,7 @@ async function deleteMenu (req, res) {
   try {
     const deletedMenu = await Menu.findByIdAndRemove(req.body.menuId);
     const bocas = await Boca.update({ _id : { $in : deletedMenu.bocas }}, { assigned : false }, { multi: true });
-    const menus = await Menu.find({}).populate('bocas').sort([['createdAt', -1]]);
+    const menus = await Menu.find({ restaurant : req.user.restaurant }).populate('bocas').sort({'createdAt' : 'desc'});
     return res.status(200).json(menus);
   } catch (err) {
     return errorHandler(err, req, res);
@@ -74,4 +84,5 @@ module.exports = {
   getMenuById,
   updateMenu,
   deleteMenu,
+  getAllMenusClient,
 };

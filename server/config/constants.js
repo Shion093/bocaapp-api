@@ -14,9 +14,5 @@ module.exports = {
       ? process.env.MONGO_URI_TESTS
       : process.env.MONGO_URI,
   },
-  google    : {
-    clientId     : process.env.CLIENT_ID,
-    clientSecret : process.env.CLIENT_SECRET,
-  },
-  cookieKey : process.env.COOKIE_KEY,
+  restaurant : process.env.RESTAURANT_DOMAIN,
 };

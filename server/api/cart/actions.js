@@ -8,14 +8,15 @@ const uploadS3 = require('../../helpers/s3');
 
 async function getCart (req, res, next) {
   try {
-    let cart = await Cart.findOne({ user : req.params.userId });
+    let cart = await Cart.findOne({ user : req.params.userId, restaurant : req.params.restId });
     if (_.isNull(cart)) {
       cart = new Cart({
-        user     : req.params.userId,
-        products : [],
-        tax      : 0,
-        subtotal : 0,
-        total    : 0,
+        user       : req.params.userId,
+        restaurant : req.params.restId,
+        products   : [],
+        tax        : 0,
+        subtotal   : 0,
+        total      : 0,
       });
       await cart.save();
     }
@@ -56,7 +57,7 @@ async function addToCart (req, res, next) {
       item.qty = 1;
       cart = await Cart.findOneAndUpdate({ user : '5a8e6d8491d11a0956875739' },
         {
-          $push : {
+          $push      : {
             products : {
               ...item,
             }

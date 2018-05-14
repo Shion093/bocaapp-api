@@ -7,12 +7,16 @@ const bocaSchema = new mongoose.Schema({
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'User',
   },
-  menu      : {
+  menu        : {
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'Menu',
   },
-  assigned : {
-    type : Boolean,
+  restaurant  : {
+    type : mongoose.Schema.Types.ObjectId,
+    ref  : 'Restaurant',
+  },
+  assigned    : {
+    type    : Boolean,
     default : false,
   },
   description : {
@@ -30,7 +34,7 @@ const bocaSchema = new mongoose.Schema({
     type : String,
     trim : true,
   },
-  price : {
+  price       : {
     type : Number
   }
 }, { timestamps : true });
@@ -38,9 +42,9 @@ const bocaSchema = new mongoose.Schema({
 bocaSchema.pre('remove', function (next) {
   if (this.menu) {
     Menu.update(
-      { _id : this.menu},
-      { $pull: { bocas: this._id } },
-      { multi: true })  //if reference exists in multiple documents
+      { _id : this.menu },
+      { $pull : { bocas : this._id } },
+      { multi : true })
       .exec();
     next();
   }

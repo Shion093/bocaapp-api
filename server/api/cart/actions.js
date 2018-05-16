@@ -42,6 +42,7 @@ async function addToCart (req, res, next) {
     const existingCart = await Cart.findOne({
       user           : '5a8e6d8491d11a0956875739',
       _id            : cartId,
+      restaurant     : item.restaurant,
       'products._id' : item._id,
     });
     if (existingCart) {
@@ -50,13 +51,15 @@ async function addToCart (req, res, next) {
       cart = await Cart.findOneAndUpdate({
           user           : '5a8e6d8491d11a0956875739',
           _id            : cartId,
-          'products._id' : item._id
+          'products._id' : item._id,
+          restaurant     : item.restaurant,
         },
         { $set : { 'products.$.qty' : newQty } }, { new : true });
     } else {
       item.qty = 1;
       cart = await Cart.findOneAndUpdate({ user : '5a8e6d8491d11a0956875739' },
         {
+          restaurant : item.restaurant,
           $push      : {
             products : {
               ...item,

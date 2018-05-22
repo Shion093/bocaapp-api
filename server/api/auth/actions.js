@@ -12,7 +12,21 @@ async function loginAdmin (req, res, next) {
       const { token, refreshToken } = user.generateToken(user);
       return res.status(200).json({ token, refreshToken, user : _.omit(user.toJSON(), ['password', '__v']) });
     }
-    return res.status(403).json({ error : 'Unatorized' });
+    return res.status(403).json({ error : 'Unauthorized' });
+  } catch (err) {
+    return errorHandler(err, req, res);
+  }
+}
+
+async function loginUser (req, res, next) {
+  try {
+    const user = await User.findOne({ email : req.body.email });
+    const isMatch = await user.comparePassword(req.body.password);
+    if (isMatch && (user.role === 'user')) {
+      const { token, refreshToken } = user.generateToken(user);
+      return res.status(200).json({ token, refreshToken, user : _.omit(user.toJSON(), ['password', '__v']) });
+    }
+    return res.status(403).json({ error : 'Unauthorized' });
   } catch (err) {
     return errorHandler(err, req, res);
   }
@@ -20,4 +34,5 @@ async function loginAdmin (req, res, next) {
 
 module.exports = {
   loginAdmin,
+  loginUser,
 };

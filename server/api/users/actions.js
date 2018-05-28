@@ -6,6 +6,7 @@ const User = require('./model');
 
 async function createUser (req, res, next) {
   try {
+    console.log(req.body);
     const newUser = new User(req.body);
     const userSaved = await newUser.save();
     return res.status(200).json(userSaved);

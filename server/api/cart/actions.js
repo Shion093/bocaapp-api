@@ -37,10 +37,10 @@ async function createCart (req, res, next) {
 
 async function addToCart (req, res, next) {
   try {
-    const { item, cartId } = req.body;
+    const { item, cartId, userId } = req.body;
     let cart;
     const existingCart = await Cart.findOne({
-      user           : '5a8e6d8491d11a0956875739',
+      user           : userId,
       _id            : cartId,
       restaurant     : item.restaurant,
       'products._id' : item._id,
@@ -49,7 +49,7 @@ async function addToCart (req, res, next) {
       const product = _.find(existingCart.products, { _id : item._id });
       const newQty = product.qty + 1;
       cart = await Cart.findOneAndUpdate({
-          user           : '5a8e6d8491d11a0956875739',
+          user           : userId,
           _id            : cartId,
           'products._id' : item._id,
           restaurant     : item.restaurant,
@@ -57,7 +57,7 @@ async function addToCart (req, res, next) {
         { $set : { 'products.$.qty' : newQty } }, { new : true });
     } else {
       item.qty = 1;
-      cart = await Cart.findOneAndUpdate({ user : '5a8e6d8491d11a0956875739' },
+      cart = await Cart.findOneAndUpdate({ user : userId },
         {
           restaurant : item.restaurant,
           $push      : {
@@ -76,9 +76,9 @@ async function addToCart (req, res, next) {
 
 async function removeFromCart (req, res, next) {
   try {
-    const { cartId, itemId } = req.body;
+    const { cartId, itemId, userId } = req.body;
     const cart = await Cart.findOneAndUpdate({
-        user           : '5a8e6d8491d11a0956875739',
+        user           : userId,
         _id            : cartId,
         'products._id' : itemId,
       },

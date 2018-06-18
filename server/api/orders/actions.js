@@ -24,7 +24,7 @@ async function userOrders (req, res, next) {
   try {
     const orders = await Order.find({
       user : req.params.userId,
-    });
+    }).sort({ createdAt : 'desc' });
     return res.status(200).json(orders);
   } catch (err) {
     return errorHandler(err, req, res);
@@ -48,7 +48,7 @@ async function reOrder (req, res, next) {
     const cart = await Cart.findOneAndUpdate(
       { user : req.body.userId },
       { $set : { products : order.products } },
-      { new : true }
+      { new : true, upsert : true }
     );
     cart.calculatesPrices();
     return res.status(200).json(cart);

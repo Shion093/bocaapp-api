@@ -4,10 +4,11 @@ const multer = require('multer');
 
 const { login } = require('./validations');
 
-const { loginAdmin } = require('./actions');
+const { loginAdmin, loginUser } = require('./actions');
 
 const router = express.Router();
 
 router.route('/login/admin').post(validate(login), loginAdmin);
+router.route('/login/user').post(validate(login), loginUser);
 
 module.exports = router;

@@ -3,6 +3,18 @@ const _ = require('lodash');
 
 const orderStatus = ['Procesando', 'En cocina', 'Lista', 'Entregada'];
 
+const pointSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['Point'],
+    required: true
+  },
+  coordinates: {
+    type: [Number],
+    required: true
+  }
+});
+
 const orderSchema = new mongoose.Schema({
   user        : {
     type : mongoose.Schema.Types.ObjectId,
@@ -17,6 +29,8 @@ const orderSchema = new mongoose.Schema({
   total       : { type : Number },
   tax         : { type : Number },
   subTotal    : { type : Number },
+  location    : { type: pointSchema, required: true },
+  address     : { },
   status      : { type : String, enum : orderStatus, default : 'Procesando' }
 }, { timestamps : true });
 

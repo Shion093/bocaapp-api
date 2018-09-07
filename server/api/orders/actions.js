@@ -9,7 +9,9 @@ async function createOrder (req, res, next) {
     const cart = await Cart.findOne({
       user : req.body.userId,
     });
+    const { lng, lat } = req.body.location;
     const order = _.omit(cart.toJSON(), ['_id', 'createdAt', 'updatedAt', '__v']);
+    order.location = { type : 'Point', coordinates : [lat, lng] };
     const newOrder = new Order(order);
     newOrder.orderNumber = await newOrder.getOrderNumber();
     await newOrder.save();

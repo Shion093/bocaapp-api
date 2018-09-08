@@ -18,9 +18,11 @@ const userSchema = new mongoose.Schema({
     type   : String,
     unique : true,
   },
-  firstName   : { type : String },
-  lastName    : { type : String },
-  phoneNumber : { type : String },
+  firstName        : { type : String },
+  lastName         : { type : String },
+  phoneNumber      : { type : String },
+  verificationCode : { type : Number },
+  isActive         : { type : Boolean },
   role : {
     type    : String,
     enum    : ['user', 'admin', 'superAdmin', 'mod'],
@@ -87,4 +89,4 @@ userSchema.methods.generateToken = function generateToken (user) {
   };
 };
 
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('User', userSchema);

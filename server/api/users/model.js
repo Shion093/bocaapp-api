@@ -14,13 +14,11 @@ const userSchema = new mongoose.Schema({
     type     : String,
     required : true,
   },
-  username : {
-    type   : String,
-    unique : true,
-  },
-  firstName   : { type : String },
-  lastName    : { type : String },
-  phoneNumber : { type : String },
+  firstName        : { type : String },
+  lastName         : { type : String },
+  phoneNumber      : { type : String },
+  verificationCode : { type : String },
+  isActive         : { type : Boolean },
   role : {
     type    : String,
     enum    : ['user', 'admin', 'superAdmin', 'mod'],
@@ -39,6 +37,13 @@ userSchema.pre('save', function (next) {
       return next(err);
     }
     user.password = hash;
+    next();
+  })
+  bcrypt.hash(user.verificationCode, 10, (err, hash) => {
+    if (err) {
+      return next(err);
+    }
+    user.verificationCode = hash;
     next();
   })
 });
@@ -87,4 +92,4 @@ userSchema.methods.generateToken = function generateToken (user) {
   };
 };
 
-module.exports = mongoose.model('user', userSchema);
+module.exports = mongoose.model('User', userSchema);

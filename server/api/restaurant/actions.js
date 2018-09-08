@@ -33,7 +33,6 @@ async function createRestaurant (req, res, next) {
 async function restaurantByUser (req, res, next) {
   try {
     const restaurant = await Restaurant.findOne({ admin : req.params.userId });
-    console.log(restaurant);
   } catch (err) {
     return errorHandler(err, req, res);
   }

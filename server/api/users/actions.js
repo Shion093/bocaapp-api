@@ -18,8 +18,7 @@ async function createUser (req, res, next) {
     // Create promise and SNS service object
     await new aws.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
     req.body.isActive = false;
-    req.body.verificationCode = verificationCode;
-    req.body.username = req.body.email;
+    req.body.verificationCode = verificationCode.toString();
     const newUser = new User(req.body);
     const userSaved = await newUser.save();
     return res.status(200).json(_.omit(userSaved, ['password']));
@@ -40,7 +39,17 @@ async function test (req, res, next) {
   }
 }
 
+async function validateEmail (req, res, next) {
+  try {
+    const user = await User.findOne({ email : req.params.email });
+    return res.status(200).json({exist: user !== null });;
+  } catch (err) {
+    return errorHandler(err, req, res, next);
+  }
+}
+
 module.exports = {
   createUser,
   test,
+  validateEmail,
 };

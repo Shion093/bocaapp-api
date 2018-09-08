@@ -14,14 +14,10 @@ const userSchema = new mongoose.Schema({
     type     : String,
     required : true,
   },
-  username : {
-    type   : String,
-    unique : true,
-  },
   firstName        : { type : String },
   lastName         : { type : String },
   phoneNumber      : { type : String },
-  verificationCode : { type : Number },
+  verificationCode : { type : String },
   isActive         : { type : Boolean },
   role : {
     type    : String,
@@ -41,6 +37,13 @@ userSchema.pre('save', function (next) {
       return next(err);
     }
     user.password = hash;
+    next();
+  })
+  bcrypt.hash(user.verificationCode, 10, (err, hash) => {
+    if (err) {
+      return next(err);
+    }
+    user.verificationCode = hash;
     next();
   })
 });

@@ -8,9 +8,10 @@ const aws = require('../../helpers/aws');
 
 async function createUser (req, res, next) {
   try {
+    console.log(req.body);
     const verificationCode = Math.floor(1000 + Math.random() * 9000);
 
-    var params = {
+    const params = {
       Message: `Hello breee, su codigo de verificacion es: ${verificationCode}`,
       PhoneNumber: req.body.phoneNumber,
     };
@@ -21,7 +22,7 @@ async function createUser (req, res, next) {
     req.body.verificationCode = verificationCode.toString();
     const newUser = new User(req.body);
     const userSaved = await newUser.save();
-    return res.status(200).json(_.omit(userSaved, ['password']));
+    return res.status(200).json(_.omit(userSaved, ['password', 'verificationCode']));
   } catch (err) {
     console.log(err);
     return errorHandler(err, req, res, next);

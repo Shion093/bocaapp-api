@@ -38,14 +38,7 @@ userSchema.pre('save', function (next) {
     }
     user.password = hash;
     next();
-  })
-  bcrypt.hash(user.verificationCode, 10, (err, hash) => {
-    if (err) {
-      return next(err);
-    }
-    user.verificationCode = hash;
-    next();
-  })
+  });
 });
 
 userSchema.pre('update', function (next) {

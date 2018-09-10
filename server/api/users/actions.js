@@ -20,6 +20,7 @@ async function createUser (req, res, next) {
     await new aws.SNS({apiVersion: '2010-03-31'}).publish(params).promise();
     req.body.isActive = false;
     req.body.verificationCode = verificationCode.toString();
+    req.body.username = req.body.email;
     const newUser = new User(req.body);
     const userSaved = await newUser.save();
     return res.status(200).json(_.omit(userSaved, ['password', 'verificationCode']));

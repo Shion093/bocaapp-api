@@ -15,6 +15,18 @@ const pointSchema = new mongoose.Schema({
   }
 });
 
+const address = new mongoose.Schema({
+  address: {
+    type: String,
+  },
+  color: {
+    type: String,
+  },
+  references: {
+    type: String,
+  },
+});
+
 const orderSchema = new mongoose.Schema({
   user        : {
     type : mongoose.Schema.Types.ObjectId,
@@ -30,7 +42,7 @@ const orderSchema = new mongoose.Schema({
   tax         : { type : Number },
   subTotal    : { type : Number },
   location    : { type: pointSchema, required: true },
-  address     : { },
+  address     : { type: address },
   status      : { type : String, enum : orderStatus, default : 'Procesando' }
 }, { timestamps : true });
 

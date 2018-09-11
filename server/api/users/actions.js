@@ -23,7 +23,7 @@ async function createUser (req, res, next) {
     req.body.username = req.body.email;
     const newUser = new User(req.body);
     const userSaved = await newUser.save();
-    return res.status(200).json(_.omit(userSaved, ['password', 'verificationCode']));
+    return res.status(200).json(_.omit(userSaved.toJSON(), ['password', 'verificationCode']));
   } catch (err) {
     console.log(err);
     return errorHandler(err, req, res, next);

@@ -1,7 +1,7 @@
 const express = require('express');
 const validate = require('express-validation');
 const multer = require('multer');
-const {authenticate } = require('../../config/passport');
+const { authenticate } = require('../../config/passport');
 
 const { menu, singleMenu, menuUpdate } = require('./validations');
 

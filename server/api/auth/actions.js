@@ -24,7 +24,7 @@ async function loginUser (req, res, next) {
       const isMatch = await user.comparePassword(req.body.password);
       if (isMatch && (user.role === 'user')) {
         const { token, refreshToken } = user.generateToken(user);
-        return res.status(200).json({ token, refreshToken, user : _.omit(user.toJSON(), ['password', '__v']) });
+        return res.status(200).json({ token, refreshToken, user : _.omit(user.toJSON(), ['password', '__v', 'verificationCode']) });
       }
       return res.status(403).json({ error : 'Unauthorized' });
     } else {

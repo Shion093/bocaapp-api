@@ -4,17 +4,17 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 const userSchema = new mongoose.Schema({
-  email       : {
+  email            : {
     type     : String,
     unique   : true,
     required : true,
     trim     : true
   },
-  password    : {
+  password         : {
     type     : String,
     required : true,
   },
-  username : {
+  username         : {
     type   : String,
     unique : true,
   },
@@ -23,12 +23,12 @@ const userSchema = new mongoose.Schema({
   phoneNumber      : { type : String },
   verificationCode : { type : String },
   isActive         : { type : Boolean },
-  role : {
+  role             : {
     type    : String,
     enum    : ['user', 'admin', 'superAdmin', 'mod'],
     default : 'user'
   },
-  restaurant : {
+  restaurant       : {
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'Restaurant',
   }
@@ -36,6 +36,9 @@ const userSchema = new mongoose.Schema({
 
 userSchema.pre('save', function (next) {
   const user = this;
+  if (!user.isModified('password')) {
+    return next();
+  }
   bcrypt.hash(user.password, 10, (err, hash) => {
     if (err) {
       return next(err);
@@ -47,6 +50,9 @@ userSchema.pre('save', function (next) {
 
 userSchema.pre('update', function (next) {
   const user = this;
+  if (!user.isModified('password')) {
+    return next();
+  }
   bcrypt.hash(user.password, 10, (err, hash) => {
     if (err) {
       return next(err);
@@ -81,7 +87,7 @@ userSchema.methods.generateToken = function generateToken (user) {
   };
 
   const token = jwt.sign(payload, process.env.JWT_SECRET, options);
-  const refreshToken = jwt.sign({_id : user._id}, process.env.JWT_SECRET, refreshOptions);
+  const refreshToken = jwt.sign({ _id : user._id }, process.env.JWT_SECRET, refreshOptions);
 
   return {
     token,

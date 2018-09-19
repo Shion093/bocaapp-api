@@ -18,7 +18,6 @@ async function createUser (req, res, next) {
     };
     
     // Create promise and SNS service object
-
     await sendSMS(params);
     req.body.isActive = false;
     req.body.verificationCode = verificationCode.toString();
@@ -54,10 +53,7 @@ async function validateEmail (req, res, next) {
 
 async function verifyPhone (req, res, next) {
   try {
-    console.log('furhfuhurufhr', req.user);
-    console.log('furhfuhurufhr', req);
     const user = await User.findOne({ email : req.user.email });
-    console.log('ueueueu', user);
     if ( user.verificationCode === req.body.code) {
       user.isActive = true;
       await user.save();

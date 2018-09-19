@@ -18,7 +18,6 @@ async function createUser (req, res, next) {
     };
     
     // Create promise and SNS service object
-
     await sendSMS(params);
     req.body.isActive = false;
     req.body.verificationCode = verificationCode.toString();

@@ -6,12 +6,15 @@ const { hasAccess } = require('../../middlewares/acl');
 
 const { boca, assign } = require('./validations');
 
-const { createUser, test, validateEmail, verifyPhone } = require('./actions');
+const { createUser, test, validateEmail, verifyPhone, forgotPassword, verifyPhonePass, changePassword } = require('./actions');
 
 const router = express.Router();
 
 router.route('/create').post(createUser);
+router.route('/forgot').post(forgotPassword);
 router.route('/verify').post(authenticate(), verifyPhone);
+router.route('/changePass').post(authenticate(), changePassword);
+router.route('/verifyPass').post(verifyPhonePass);
 router.route('/test').post(authenticate(), hasAccess(['admin']), test);
 
 router.route('/validateEmail/:email').get(validateEmail);

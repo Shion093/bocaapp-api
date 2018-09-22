@@ -18,7 +18,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compress());
 app.use(helmet());
 app.use(cors());
-// initialize();
+initialize();
 setJwtStrategy();
 
 app.use('/v1', routes);

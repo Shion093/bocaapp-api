@@ -25,7 +25,6 @@ async function createRestaurant (req, res, next) {
     await User.findOneAndUpdate({ _id : user._id }, { role : 'admin' , restaurant : restaurant._id});
     return res.status(200).json(restaurant);
   } catch (err) {
-    console.log(err);
     return errorHandler(err, req, res);
   }
 }
@@ -42,7 +41,6 @@ async function restaurantByDomain (req, res, next) {
   try {
     const restaurant = await Restaurant.findOne({ domain : req.params.domain });
     const menus = await Menu.find({ restaurant : restaurant._id }).populate('bocas').sort({'createdAt' : 'desc'});
-    console.log(restaurant);
     return res.status(200).json({restaurant, menus});
   } catch (err) {
     return errorHandler(err, req, res);

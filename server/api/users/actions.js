@@ -9,7 +9,6 @@ const { sendSMS } = require('../../helpers/sms');
 
 async function createUser (req, res, next) {
   try {
-    console.log(req.body);
     const verificationCode = Math.floor(1000 + Math.random() * 9000);
 
     const params = {
@@ -26,18 +25,14 @@ async function createUser (req, res, next) {
     const userSaved = await newUser.save();
     return res.status(200).json(_.omit(userSaved.toJSON(), ['password', 'verificationCode']));
   } catch (err) {
-    console.log(err);
     return errorHandler(err, req, res, next);
   }
 }
 
 async function test (req, res, next) {
   try {
-    console.log(req.headers);
-    console.log(req.user);
     return res.status(200).json(req.user);
   } catch (err) {
-    // console.log(err);
     return errorHandler(err, req, res, next);
   }
 }
@@ -68,7 +63,6 @@ async function verifyPhone (req, res, next) {
 async function changePassword (req, res, next) {
   try {
     const user = await User.findOne({ email : req.user.email });
-    console.log(user);
     const isMatch = await user.comparePassword(req.body.password);
     if (user && !isMatch) {
       user.password = req.body.password;

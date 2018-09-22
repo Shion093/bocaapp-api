@@ -37,7 +37,7 @@ async function createCart (req, res, next) {
 
 async function addToCart (req, res, next) {
   try {
-    const { item, cartId } = req.body;
+    const { item, cartId, add } = req.body;
     const { _id : userId, isActive } = req.user;
     if (isActive) {
       let cart;
@@ -49,14 +49,23 @@ async function addToCart (req, res, next) {
       });
       if (existingCart) {
         const product = _.find(existingCart.products, { _id : item._id });
-        const newQty = product.qty + 1;
-        cart = await Cart.findOneAndUpdate({
-            user           : userId,
-            _id            : cartId,
-            'products._id' : item._id,
-            restaurant     : item.restaurant,
-          },
-          { $set : { 'products.$.qty' : newQty } }, { new : true });
+        const newQty = add ? product.qty + 1 : product.qty - 1;
+        if (product.qty === 1 && !add) {
+          cart = await Cart.findOneAndUpdate({
+              user           : userId,
+              _id            : cartId,
+              'products._id' : item._id,
+            },
+            { $pull : { products : { _id : item._id } } }, { new : true });
+        } else {
+          cart = await Cart.findOneAndUpdate({
+              user           : userId,
+              _id            : cartId,
+              'products._id' : item._id,
+              restaurant     : item.restaurant,
+            },
+            { $set : { 'products.$.qty' : newQty } }, { new : true });
+        }
       } else {
         item.qty = 1;
         cart = await Cart.findOneAndUpdate({ user : userId },

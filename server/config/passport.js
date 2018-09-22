@@ -11,12 +11,14 @@ const authenticate = () => {
       let tokens = {};
       if (info) {
         tokens = await refreshTokens(req.headers['x-refresh-token']);
-        res.set('Access-Control-Expose-Headers', 'x-token, x-refresh-token');
-        res.set('x-token', tokens.token);
-        res.set('x-refresh-token', tokens.refreshToken);
         if (_.isEmpty(tokens)) {
           return res.status(401).json({ message : 'Invalid token or expired' })
         }
+        res.set('Access-Control-Expose-Headers', 'x-token, x-refresh-token');
+        res.set('x-token', tokens.token);
+        res.set('x-refresh-token', tokens.refreshToken);
+        req.user = tokens.user;
+        return next();
       }
       if (err) {
         return res.status(401).json({ message : 'Unauthorized' })
@@ -36,14 +38,14 @@ function setJwtStrategy () {
   };
   const strategy = new passportJwt.Strategy(opts, (req, jwtPayload, done) => {
     const _id = jwtPayload._id;
-    console.log(_id);
-    User.findOne({ _id }, (err, user) => {
-      if (err) return done(err, false);
+    return User.findOne({ _id }).then((user) => {
       if (!user) {
         return done(null, false);
       }
       return done(null, user)
-    });
+    }).catch((err) => {
+      return done(err, false);
+    })
   });
 
   passport.use(strategy);

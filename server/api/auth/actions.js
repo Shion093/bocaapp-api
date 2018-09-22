@@ -20,10 +20,8 @@ async function loginAdmin (req, res, next) {
 async function loginUser (req, res, next) {
   try {
     const user = await User.findOne({ email : req.body.email });
-    console.log(user);
     if (user) {
       const isMatch = await user.comparePassword(req.body.password);
-      console.log(isMatch);
       if (isMatch && (user.role === 'user')) {
         const { token, refreshToken } = user.generateToken(user);
         return res.status(200).json({ token, refreshToken, user : _.omit(user.toJSON(), ['password', '__v', 'verificationCode']) });

@@ -8,7 +8,7 @@ const cors = require('cors');
 const routes = require('../api');
 const { logs } = require('./constants');
 const { handler, converter, notFound } = require('../middlewares/errors');
-const passport = require('./passport');
+const { initialize, setJwtStrategy } = require('./passport');
 
 const app = express();
 
@@ -18,8 +18,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(compress());
 app.use(helmet());
 app.use(cors());
-app.use(passport.initialize());
-passport.setJwtStrategy();
+initialize();
+setJwtStrategy();
 
 app.use('/v1', routes);
 

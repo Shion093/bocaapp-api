@@ -3,8 +3,8 @@ const _ = require('lodash');
 const { handler : errorHandler } = require('../../middlewares/errors');
 const Cart = require('../cart/model');
 const User = require('./model');
-// const { sendSMS } = require('../../helpers/sns');
-const { sendSMS } = require('../../helpers/sms');
+const { sendSMS } = require('../../helpers/sns');
+// const { sendSMS } = require('../../helpers/sms');
 
 
 async function createUser (req, res, next) {

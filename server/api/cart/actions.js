@@ -37,38 +37,51 @@ async function createCart (req, res, next) {
 
 async function addToCart (req, res, next) {
   try {
-    const { item, cartId, userId } = req.body;
-    let cart;
-    const existingCart = await Cart.findOne({
-      user           : userId,
-      _id            : cartId,
-      restaurant     : item.restaurant,
-      'products._id' : item._id,
-    });
-    if (existingCart) {
-      const product = _.find(existingCart.products, { _id : item._id });
-      const newQty = product.qty + 1;
-      cart = await Cart.findOneAndUpdate({
-          user           : userId,
-          _id            : cartId,
-          'products._id' : item._id,
-          restaurant     : item.restaurant,
-        },
-        { $set : { 'products.$.qty' : newQty } }, { new : true });
-    } else {
-      item.qty = 1;
-      cart = await Cart.findOneAndUpdate({ user : userId },
-        {
-          restaurant : item.restaurant,
-          $push      : {
-            products : {
-              ...item,
+    const { item, cartId, add } = req.body;
+    const { _id : userId, isActive } = req.user;
+    if (isActive) {
+      let cart;
+      const existingCart = await Cart.findOne({
+        user           : userId,
+        _id            : cartId,
+        restaurant     : item.restaurant,
+        'products._id' : item._id,
+      });
+      if (existingCart) {
+        const product = _.find(existingCart.products, { _id : item._id });
+        const newQty = add ? product.qty + 1 : product.qty - 1;
+        if (product.qty === 1 && !add) {
+          cart = await Cart.findOneAndUpdate({
+              user           : userId,
+              _id            : cartId,
+              'products._id' : item._id,
+            },
+            { $pull : { products : { _id : item._id } } }, { new : true });
+        } else {
+          cart = await Cart.findOneAndUpdate({
+              user           : userId,
+              _id            : cartId,
+              'products._id' : item._id,
+              restaurant     : item.restaurant,
+            },
+            { $set : { 'products.$.qty' : newQty } }, { new : true });
+        }
+      } else {
+        item.qty = 1;
+        cart = await Cart.findOneAndUpdate({ user : userId },
+          {
+            restaurant : item.restaurant,
+            $push      : {
+              products : {
+                ...item,
+              }
             }
-          }
-        }, { new : true, upsert : true });
+          }, { new : true, upsert : true });
+      }
+      cart.calculatesPrices();
+      return res.status(200).json(cart);
     }
-    cart.calculatesPrices();
-    return res.status(200).json(cart);
+    return res.status(401).json({ error : 'Unauthorized' });
   } catch (err) {
     return errorHandler(err, req, res);
   }

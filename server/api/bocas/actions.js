@@ -8,7 +8,6 @@ const uploadS3 = require('../../helpers/s3');
 
 async function getAllBocas (req, res, next) {
   try {
-    console.log(req.user);
     const bocas = await Boca.find({ assigned : false, restaurant : req.user.restaurant }).sort({'createdAt' : 'desc'});
     return res.status(200).json(bocas);
   } catch (err) {

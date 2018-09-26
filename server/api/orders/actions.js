@@ -1,4 +1,3 @@
-const shortid = require('shortid');
 const _ = require('lodash');
 const { handler : errorHandler } = require('../../middlewares/errors');
 const Cart = require('../cart/model');
@@ -12,6 +11,8 @@ async function createOrder (req, res, next) {
       });
       const { lng, lat } = req.body.location;
       const order = _.omit(cart.toJSON(), ['_id', 'createdAt', 'updatedAt', '__v']);
+      order.address = req.body.address.address;
+      order.detail = req.body.address.detail;
       order.location = { type : 'Point', coordinates : [lat, lng] };
       const newOrder = new Order(order);
       newOrder.orderNumber = await newOrder.getOrderNumber();

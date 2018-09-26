@@ -9,7 +9,7 @@ const { createOrder, userOrders, reOrder, allOrders, changeOrderStatus } = requi
 
 const router = express.Router();
 
-router.route('/create').post(createOrder);
+router.route('/create').post(authenticate(), createOrder);
 router.route('/reorder').post(reOrder);
 router.route('/status').post(changeOrderStatus);
 router.route('/all').get(authenticate(), allOrders);

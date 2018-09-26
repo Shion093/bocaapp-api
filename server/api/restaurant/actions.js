@@ -40,7 +40,10 @@ async function restaurantByUser (req, res, next) {
 async function restaurantByDomain (req, res, next) {
   try {
     const restaurant = await Restaurant.findOne({ domain : req.params.domain });
-    const menus = await Menu.find({ restaurant : restaurant._id }).populate('bocas').sort({'createdAt' : 'desc'});
+    const menus = await Menu.find({
+      restaurant : restaurant._id,
+      bocas: { $exists: true, $ne: [] }
+    }).populate('bocas').sort({'createdAt' : 'desc'});
     return res.status(200).json({restaurant, menus});
   } catch (err) {
     return errorHandler(err, req, res);

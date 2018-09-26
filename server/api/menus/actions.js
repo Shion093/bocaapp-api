@@ -17,7 +17,10 @@ async function getAllMenus (req, res, next) {
 
 async function getAllMenusClient (req, res, next) {
   try {
-    const menus = await Menu.find({ restaurant : req.params.restId }).populate('bocas').sort({'createdAt' : 'desc'});
+    const menus = await Menu.find({
+      restaurant : req.params.restId,
+      bocas      : { $exists: true, $ne: [] },
+    }).populate('bocas').sort({'createdAt' : 'desc'});
     return res.status(200).json(menus);
   } catch (err) {
     return errorHandler(err, req, res);

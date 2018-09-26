@@ -30,7 +30,8 @@ const orderSchema = new mongoose.Schema({
   tax         : { type : Number },
   subTotal    : { type : Number },
   location    : { type: pointSchema, required: true },
-  address     : { },
+  address     : { type: String },
+  detail      : { type: String },
   status      : { type : String, enum : orderStatus, default : 'Procesando' }
 }, { timestamps : true });
 

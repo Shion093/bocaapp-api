@@ -32,6 +32,7 @@ async function createRestaurant (req, res, next) {
 async function restaurantByUser (req, res, next) {
   try {
     const restaurant = await Restaurant.findOne({ admin : req.params.userId });
+    return res.status(200).json({restaurant});
   } catch (err) {
     return errorHandler(err, req, res);
   }
@@ -47,8 +48,18 @@ async function restaurantByDomain (req, res, next) {
   }
 }
 
+async function handleStore (req, res, next) {
+  try {
+    const restaurant = await Restaurant.findOneAndUpdate({ domain : req.body.domain }, { isOpen: req.body.isOpen });
+    return res.status(200).json({ restaurant });
+  } catch (err) {
+    return errorHandler(err, req, res);
+  }
+}
+
 module.exports = {
   createRestaurant,
   restaurantByUser,
   restaurantByDomain,
+  handleStore,
 };

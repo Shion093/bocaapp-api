@@ -10,7 +10,6 @@ const { sendSMS } = require('../../helpers/sns');
 async function createUser (req, res, next) {
   try {
     const verificationCode = Math.floor(1000 + Math.random() * 9000);
-
     const params = {
       message : `Hello breee, su codigo de verificacion es: ${verificationCode}`,
       phone   : req.body.phoneNumber,
@@ -25,6 +24,7 @@ async function createUser (req, res, next) {
     const userSaved = await newUser.save();
     return res.status(200).json(_.omit(userSaved.toJSON(), ['password', 'verificationCode']));
   } catch (err) {
+    console.log(err);
     return errorHandler(err, req, res, next);
   }
 }

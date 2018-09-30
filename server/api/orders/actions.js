@@ -39,7 +39,10 @@ async function userOrders (req, res, next) {
 
 async function allOrders (req, res, next) {
   try {
-    const orders = await Order.find({restaurant : req.user.restaurant }).sort({ createdAt : 'desc' });
+    const orders = await Order.find({
+      restaurant : req.user.restaurant
+    }).populate('user')
+      .sort({ createdAt : 'desc' });
     return res.status(200).json(orders);
   } catch (err) {
     return errorHandler(err, req, res);

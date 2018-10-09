@@ -6,11 +6,11 @@ const cartSchema = new mongoose.Schema({
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'User',
   },
-  restaurant : {
+  store : {
     type : mongoose.Schema.Types.ObjectId,
-    ref  : 'Restaurant',
+    ref  : 'store',
   },
-  products   : [],
+  products   : [{type : mongoose.Schema.Types.ObjectId, ref: 'Product'}],
   total      : { type : Number },
   tax        : { type : Number },
   subTotal   : { type : Number },

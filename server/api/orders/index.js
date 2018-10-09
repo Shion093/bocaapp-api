@@ -3,7 +3,7 @@ const validate = require('express-validation');
 const multer = require('multer');
 const { authenticate } = require('../../config/passport');
 
-const { boca, assign } = require('./validations');
+const { product, assign } = require('./validations');
 
 const { createOrder, userOrders, reOrder, allOrders, changeOrderStatus } = require('./actions');
 

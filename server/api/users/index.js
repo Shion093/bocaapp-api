@@ -4,7 +4,7 @@ const multer = require('multer');
 const { authenticate } = require('../../config/passport');
 const { hasAccess } = require('../../middlewares/acl');
 
-const { boca, assign } = require('./validations');
+const { product, assign } = require('./validations');
 
 const { createUser, test, validateEmail, verifyPhone, forgotPassword, verifyPhonePass, changePassword } = require('./actions');
 

@@ -3,7 +3,7 @@ const validate = require('express-validation');
 const multer = require('multer');
 const { authenticate } = require('../../config/passport');
 
-const { boca, assign } = require('./validations');
+const { product, assign } = require('./validations');
 
 const { createCart, getCart, addToCart, removeFromCart } = require('./actions');
 
@@ -15,6 +15,6 @@ router.route('/add').post(authenticate(), addToCart);
 
 router.route('/remove').post(removeFromCart);
 
-router.route('/:userId/:restId').get(getCart);
+router.route('/:userId/:storeId').get(getCart);
 
 module.exports = router;

@@ -20,9 +20,9 @@ const orderSchema = new mongoose.Schema({
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'User',
   },
-  restaurant  : {
+  store  : {
     type : mongoose.Schema.Types.ObjectId,
-    ref  : 'Restaurant',
+    ref  : 'store',
   },
   orderNumber : { type : Number },
   products    : [],
@@ -36,18 +36,18 @@ const orderSchema = new mongoose.Schema({
 
 const counterSchema = new mongoose.Schema({
   name       : { type : String },
-  restaurant : {
+  store : {
     type : mongoose.Schema.Types.ObjectId,
-    ref  : 'Restaurant',
+    ref  : 'store',
   },
   counter    : { type : Number },
 });
 
 const counter = mongoose.model('Counter', counterSchema);
 
-orderSchema.methods.getOrderNumber = function (restId) {
+orderSchema.methods.getOrderNumber = function (storeId) {
   return counter.findOneAndUpdate(
-    { name : 'orderNumbers', restaurant : restId },
+    { name : 'orderNumbers', store : storeId },
     { $inc : { counter : 1 } },
     { new : true, upsert : true }
   ).then((result) => result.counter);

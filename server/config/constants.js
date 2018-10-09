@@ -14,5 +14,5 @@ module.exports = {
       ? process.env.MONGO_URI_TESTS
       : process.env.MONGO_URI,
   },
-  restaurant : process.env.RESTAURANT_DOMAIN,
+  company : process.env.COMPANY_DOMAIN,
 };

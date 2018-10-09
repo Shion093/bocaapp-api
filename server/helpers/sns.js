@@ -18,7 +18,7 @@ async function sendSMS ({ phone, message }) {
     PhoneNumber : phone,
   };
   const sms = await SNS.publish(params).promise();
-  console.log(sms);
+  // console.log(sms);
   return sms;
 
 }

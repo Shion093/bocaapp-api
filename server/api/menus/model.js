@@ -5,9 +5,9 @@ const menuSchema = new mongoose.Schema({
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'User',
   },
-  restaurant  : {
+  store  : {
     type     : mongoose.Schema.Types.ObjectId,
-    ref      : 'Restaurant',
+    ref      : 'store',
     required : true,
   },
   description : {
@@ -24,9 +24,9 @@ const menuSchema = new mongoose.Schema({
   picture     : {
     type : String,
   },
-  bocas       : [{
+  products       : [{
     type : mongoose.Schema.Types.ObjectId,
-    ref  : 'Boca',
+    ref  : 'Product',
   }]
 }, { timestamps : true });
 

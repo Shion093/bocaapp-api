@@ -1,7 +1,7 @@
 const _ = require('lodash');
 
 const aws = require('./aws');
-const { restaurant } = require('../config/constants');
+const { company } = require('../config/constants');
 
 const Route53 = new aws.Route53();
 
@@ -18,7 +18,7 @@ function getDomainParams (zoneId, url, method) {
             TTL             : 300,
             ResourceRecords : [
               {
-                Value : restaurant,
+                Value : company,
               }
             ]
           }

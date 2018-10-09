@@ -1,16 +1,16 @@
 const Joi = require('joi');
 
 module.exports = {
-  // POST /v1/bocas/create
-  boca   : {
+  // POST /v1/products/create
+  product   : {
     body : {
       description : Joi.string().min(6).required(),
       price       : Joi.number().required(),
       name        : Joi.string().max(128),
     },
   },
-  // POST /v1/bocas/update
-  bocaUpdate : {
+  // POST /v1/products/update
+  productUpdate : {
     body : {
       description : Joi.string().min(6).required(),
       price       : Joi.number().required(),
@@ -19,11 +19,11 @@ module.exports = {
       menuId      : Joi.string().max(128),
     },
   },
-  // POST /v1/bocas/assign
+  // POST /v1/products/assign
   assign : {
     body : {
       menuId : Joi.string().min(6).required(),
-      bocaId : Joi.string().min(6).required(),
+      productId : Joi.string().min(6).required(),
     },
   },
 };

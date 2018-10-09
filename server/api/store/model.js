@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const restaurantSchema = new mongoose.Schema({
+const storeSchema = new mongoose.Schema({
   admin       : {
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'User',
@@ -16,14 +16,22 @@ const restaurantSchema = new mongoose.Schema({
     index     : true,
     trim      : true,
   },
-  domain      : {
-    unique : true,
-    type   : String,
+  banner : {
+    type : String,
+    trim : true,
   },
+  logo        : {
+    type : String,
+    trim : true,
+  },
+  // domain      : {
+  //   unique : true,
+  //   type   : String,
+  // },
   isOpen: {
     type    : Boolean,
     default : true,
   }
 }, { timestamps : true });
 
-module.exports = mongoose.model('Restaurant', restaurantSchema);
+module.exports = mongoose.model('Store', storeSchema);

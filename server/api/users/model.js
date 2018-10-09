@@ -28,9 +28,9 @@ const userSchema = new mongoose.Schema({
     enum    : ['user', 'admin', 'superAdmin', 'mod'],
     default : 'user'
   },
-  restaurant       : {
+  store : {
     type : mongoose.Schema.Types.ObjectId,
-    ref  : 'Restaurant',
+    ref  : 'store',
   }
 }, { timestamps : true });
 

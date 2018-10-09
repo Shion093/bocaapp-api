@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Menu = require('../menus/model');
 
-const bocaSchema = new mongoose.Schema({
+const productSchema = new mongoose.Schema({
   author      : {
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'User',
@@ -11,9 +11,9 @@ const bocaSchema = new mongoose.Schema({
     type : mongoose.Schema.Types.ObjectId,
     ref  : 'Menu',
   },
-  restaurant  : {
+  store  : {
     type : mongoose.Schema.Types.ObjectId,
-    ref  : 'Restaurant',
+    ref  : 'Store',
   },
   assigned    : {
     type    : Boolean,
@@ -36,18 +36,21 @@ const bocaSchema = new mongoose.Schema({
   },
   price       : {
     type : Number
+  },
+  quantity : {
+    type : Number
   }
 }, { timestamps : true });
 
-bocaSchema.pre('remove', function (next) {
+productSchema.pre('remove', function (next) {
   if (this.menu) {
     Menu.update(
       { _id : this.menu },
-      { $pull : { bocas : this._id } },
+      { $pull : { products : this._id } },
       { multi : true })
       .exec();
     next();
   }
 });
 
-module.exports = mongoose.model('Boca', bocaSchema);
+module.exports = mongoose.model('Product', productSchema);

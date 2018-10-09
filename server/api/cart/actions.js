@@ -8,11 +8,11 @@ const uploadS3 = require('../../helpers/s3');
 
 async function getCart (req, res, next) {
   try {
-    let cart = await Cart.findOne({ user : req.params.userId, restaurant : req.params.restId });
+    let cart = await Cart.findOne({ user : req.params.userId, store : req.params.storeId });
     if (_.isNull(cart)) {
       cart = new Cart({
         user       : req.params.userId,
-        restaurant : req.params.restId,
+        store      : req.params.storeId,
         products   : [],
         tax        : 0,
         subtotal   : 0,
@@ -28,8 +28,8 @@ async function getCart (req, res, next) {
 
 async function createCart (req, res, next) {
   try {
-    const boca = await (new Cart(req.body)).save();
-    return res.status(200).json(boca);
+    const product = await (new Cart(req.body)).save();
+    return res.status(200).json(product);
   } catch (err) {
     return errorHandler(err, req, res);
   }
@@ -44,7 +44,7 @@ async function addToCart (req, res, next) {
       const existingCart = await Cart.findOne({
         user           : userId,
         _id            : cartId,
-        restaurant     : item.restaurant,
+        store          : item.store,
         'products._id' : item._id,
       });
       if (existingCart) {
@@ -62,7 +62,7 @@ async function addToCart (req, res, next) {
               user           : userId,
               _id            : cartId,
               'products._id' : item._id,
-              restaurant     : item.restaurant,
+              store          : item.store,
             },
             { $set : { 'products.$.qty' : newQty } }, { new : true });
         }
@@ -70,7 +70,7 @@ async function addToCart (req, res, next) {
         item.qty = 1;
         cart = await Cart.findOneAndUpdate({ user : userId },
           {
-            restaurant : item.restaurant,
+            store      : item.store,
             $push      : {
               products : {
                 ...item,

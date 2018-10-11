@@ -2,6 +2,7 @@ const shortid = require('shortid');
 const _ = require('lodash');
 const { handler : errorHandler } = require('../../middlewares/errors');
 const User = require('../users/model');
+const  {auth : IotAuth }  = require('../../helpers/notifier');
 
 async function loginAdmin (req, res, next) {
   try {
@@ -35,7 +36,17 @@ async function loginUser (req, res, next) {
   }
 }
 
+async function authNotifier (req, res) {
+  try {
+    const creds = await IotAuth();
+    return res.status(200).json(creds);
+  } catch (err) {
+    return errorHandler(err, req, res);
+  }
+}
+
 module.exports = {
   loginAdmin,
   loginUser,
+  authNotifier,
 };

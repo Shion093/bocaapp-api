@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "acl": "0.4.11",
+    "aws-iot-device-sdk": "^2.2.1",
     "aws-sdk": "2.314.0",
     "bcrypt": "2.0.1",
     "bluebird": "3.5.1",
